@@ -35,8 +35,10 @@ def check_ckpts():
     
     
 # set enhancer with RealESRGAN
-def set_realesrgan():
-    half = True if torch.cuda.is_available() else False
+def set_realesrgan(device=None):
+    if device is None:
+        device = "cuda" if torch.cuda.is_available() else "cpu"
+    half = True if torch.cuda.is_available() and "cuda" in str(device) else False
     model = RRDBNet(
         num_in_ch=3,
         num_out_ch=3,
@@ -52,6 +54,7 @@ def set_realesrgan():
         tile=400,
         tile_pad=40,
         pre_pad=0,
+        device=device,
         half=half,
     )
     return upsampler

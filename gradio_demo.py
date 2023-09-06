@@ -23,12 +23,13 @@ class Inswapper():
         self.restore_ckpt_path = restore_ckpt_path
         
         check_ckpts()
-        self.upsampler = set_realesrgan()
-
+        
         if device is None:
             device = torch.device("mps" if torch.backends.mps.is_available() else "cuda" if torch.cuda.is_available() else "cpu")
         print(f"Using device: {device}")
         self.device = device
+
+        self.upsampler = set_realesrgan(device=device)
 
         # Load CodeFormer for face restoration
         self.codeformer_net = ARCH_REGISTRY.get("CodeFormer")(
